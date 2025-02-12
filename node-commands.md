@@ -1,24 +1,37 @@
-- brew list nvm
+```
+brew list nvm
+```
 
 If it’s installed, you should see output like:
 /opt/homebrew/Cellar/nvm/0.39.1/ (or another version)
 
-- brew --prefix nvm
+```
+brew --prefix nvm
+```
 
 This will return the correct path, usually something like:
 /opt/homebrew/opt/nvm
 
 
-- echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+```
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
+```
 
-- echo '[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"' >> ~/.zshrc
+```
+echo '[ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"' >> ~/.zshrc
+```
 
-- echo '[ -s "$(brew --prefix nvm)/etc/bash_completion" ] && \. "$(brew --prefix nvm)/etc/bash_completion"' >> ~/.zshrc
+```
+echo '[ -s "$(brew --prefix nvm)/etc/bash_completion" ] && \. "$(brew --prefix nvm)/etc/bash_completion"' >> ~/.zshrc
+```
 
-- source ~/.zshrc
+```
+source ~/.zshrc
+```
 
-
-- nvm --version
+```
+nvm --version
+```
 - which nvm
 
 
