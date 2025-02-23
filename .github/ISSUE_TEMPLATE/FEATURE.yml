@@ -1,7 +1,7 @@
-name: "New Feature Request"
+name: "New Feature Request!"
 description: Create a new ticket for a new feature request
 title: "[REQUEST]: - <title>"
-labels: ["triage", "new-feature"]
+labels: ["triage", "new-feature", "enhancement"]
 projects: ["CD OPS"]
 assignees:
   - gtamilvanan17
