@@ -58,14 +58,6 @@ body:
       render: bash
     validations:
       required: false
-  - type: textarea
-    id: logs
-    attributes:
-      label: "Logs"
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: bash
-    validations:
-      required: false
   - type: dropdown
     id: version
     attributes:
@@ -92,9 +84,11 @@ body:
   - type: textarea
     id: logs
     attributes:
-      label: Relevant log output
+      label: "Logs"
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      render: bash
+    validations:
+      required: false
   - type: checkboxes
     id: terms
     attributes:
