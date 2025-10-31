@@ -50,6 +50,6 @@ jobs:
         run: |
           supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKENNN }}"
           supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REFFF }}" --password "${{ secrets.SUPABASE_DB_PASSWORDDD }}"
-          supabase db restore -f backups/backup_2025-10-31.sql
+          supabase db restore backups/backup_2025-10-31.sql
 
         continue-on-error: true
