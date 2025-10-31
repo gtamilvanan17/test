@@ -8,21 +8,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Install Supabase CLI
         run: |
           curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar xz
           sudo mv supabase /usr/local/bin/supabase
 
-      - name: Login to Supabase
-        run: supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKEN }}"
+      - name: Link Supabase project
+        run: supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REF }}" --password "${{ secrets.SUPABASE_DB_PASSWORD }}"
 
       - name: Dump database
         run: |
           mkdir -p backups
-          supabase db dump --project-ref ${{ secrets.SUPABASE_PROJECT_REF }} -f backups/backup_$(date +%Y-%m-%d).sql
+          supabase db dump --linked -f backups/backup_$(date +%Y-%m-%d).sql
 
       - name: Commit and push backup
         run: |
