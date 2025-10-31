@@ -4,6 +4,37 @@ on:
   workflow_dispatch:
 
 jobs:
+  # backup:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Install Supabase CLI
+  #       run: |
+  #         curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar xz
+  #         sudo mv supabase /usr/local/bin/supabase
+
+  #     - name: Authenticate with Supabase
+  #       run: supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKEN }}"
+
+  #     - name: Link Supabase project
+  #       run: supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REF }}" --password "${{ secrets.SUPABASE_DB_PASSWORD }}"
+
+  #     - name: Dump Supabase database
+  #       run: |
+  #         mkdir -p backups
+  #         supabase db dump --linked -f backups/backup_$(date +%Y-%m-%d).sql
+
+  #     - name: Commit and push backup
+  #       run: |
+  #         git config --global user.email "actions@github.com"
+  #         git config --global user.name "GitHub Actions"
+  #         git add backups/
+  #         git commit -m "Database backup $(date +%Y-%m-%d)"
+  #         git push
+  #       continue-on-error: true
+
   backup:
     runs-on: ubuntu-latest
 
@@ -14,23 +45,11 @@ jobs:
         run: |
           curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar xz
           sudo mv supabase /usr/local/bin/supabase
-
-      - name: Authenticate with Supabase
-        run: supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKEN }}"
-
-      - name: Link Supabase project
-        run: supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REF }}" --password "${{ secrets.SUPABASE_DB_PASSWORD }}"
-
-      - name: Dump Supabase database
+          
+      - name: Restore backup
         run: |
-          mkdir -p backups
-          supabase db dump --linked -f backups/backup_$(date +%Y-%m-%d).sql
+          supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKENNN }}"
+          supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REFFF }}" --password "${{ secrets.SUPABASE_DB_PASSWORDDD }}"
+          supabase db restore --linked -f backups/backup_2025-10-31.sql
 
-      - name: Commit and push backup
-        run: |
-          git config --global user.email "actions@github.com"
-          git config --global user.name "GitHub Actions"
-          git add backups/
-          git commit -m "Database backup $(date +%Y-%m-%d)"
-          git push
         continue-on-error: true
