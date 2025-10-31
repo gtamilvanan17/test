@@ -1,0 +1,58 @@
+name: Tommy
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Choose 'backup' or 'restore'"
+        required: true
+        default: "backup"
+
+jobs:
+  supabase-db:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Supabase CLI
+        run: |
+          curl -sL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz | tar xz
+          sudo mv supabase /usr/local/bin/supabase
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Supabase login and link
+        run: |
+          supabase login --token "${{ secrets.SUPABASE_ACCESS_TOKEN }}"
+          supabase link --project-ref "${{ secrets.SUPABASE_PROJECT_REF }}" --password "${{ secrets.SUPABASE_DB_PASSWORD }}"
+
+      - name: Backup database
+        if: ${{ github.event.inputs.mode == 'backup' }}
+        run: |
+          mkdir -p backups
+          supabase db dump -f backups/backup_$(date +%Y-%m-%d).sql
+          echo "✅ Backup created at backups/backup_$(date +%Y-%m-%d).sql"
+
+      - name: Commit and push backup to repo
+        if: ${{ github.event.inputs.mode == 'backup' }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add backups/
+          git commit -m "Database backup $(date +%Y-%m-%d)" || echo "No changes to commit"
+          git push || echo "No push needed"
+
+      - name: Restore database from backup
+        if: ${{ github.event.inputs.mode == 'restore' }}
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          LATEST_BACKUP=$(ls -t backups/*.sql | head -n 1)
+          echo "Restoring from $LATEST_BACKUP"
+          psql "$SUPABASE_DB_URL" < "$LATEST_BACKUP"
+          echo "✅ Database restored from $LATEST_BACKUP"
