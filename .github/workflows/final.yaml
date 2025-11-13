@@ -10,7 +10,7 @@ on:
   #   - cron: "0 0 * * *" # Runs every day at midnight
 
 env:
-  BACKUP_ENABLED: true
+  BACKUP_ENABLED: false
 
 jobs:
   run_db_backup:
